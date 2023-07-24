@@ -1,9 +1,7 @@
-import sys
-from time import sleep
-from datetime import datetime
-import getpass
-import sys
+import pickle
 import os
+############# Imports do cliente
+import sys
 import socket
 import getpass
 import platform
@@ -11,57 +9,47 @@ import psutil
 import winreg
 import ctypes
 import uuid
+import datetime
 import platform
 import subprocess
 from time import sleep
 import requests
 import win32com.client
+############
+class Telemetria:
+    def __init__(self, caminhos):
+        self.__caminho = caminhos
+        if os.path.exists(self.__caminho["online"]):
+            self.__codigo = self.online()
+        elif os.path.exists(self.__caminho["offline"]):
+            print("offline")
+    
+    def online(self):
+        codigo = ""
+        with open(self.__caminho["online"], "rb") as arqui:
+            codigo = pickle.load(arqui)
+           # for x in pickle.load(arqui):
+            #    codigo += f"{x}\n"
+        with open(self.__caminho["offline"], "wb") as arqui:
+            pickle.dump(codigo, arqui)
+        return codigo
+    
+    def executar(self):
+        try:
+            for x in self.__codigo:
+                print(x)
+                #exec(x)
+        except Exception as error:
+            print(error)
+            
 
-data_atual = datetime.now()
+    
 
 
-def descriptografar(texto_criptografado, chave):
-    texto_descriptografado = ''
-    for caractere in texto_criptografado:
-        if caractere.isalpha():
-            if caractere.islower():
-                novo_caractere = chr((ord(caractere) - 97 - chave) % 26 + 97)
-            else:
-                novo_caractere = chr((ord(caractere) - 65 - chave) % 26 + 65)
-        else:
-            novo_caractere = caractere
-        texto_descriptografado += novo_caractere
-    return texto_descriptografado
 
-arquivo  = ""
-nome_user = getpass.getuser()
-caminho_destino = f"C:\\telematria_patrimar\\cliente.dat"
-caminho_destino2 = f"C:\\telematria_patrimar\\"
-caminho_destino_servidor = f"\\\\server008\\G\\ARQ_PATRIMAR\\WORK\\INVENTARIO\\telemetria_patrimar\\cliente.dat"
+if __name__ == "__main__":
+    caminhos = {"online" : r"\\server008\G\ARQ_PATRIMAR\WORK\INVENTARIO\telemetria_patrimar\cliente.pickle", "offline" : r"C:\telematria_patrimar\cliente.pickle"}
+    iniciar = Telemetria(caminhos)
+    iniciar.executar()
+    
 
-if not os.path.exists(caminho_destino2):
-    os.makedirs(caminho_destino2)
-
-
-try:
-    with open(caminho_destino_servidor, "r") as arqui:
-        arquivo = arqui.read()
-        with open(caminho_destino,"w") as atualizar:
-            atualizar.write(arquivo)
-except:
-    try:
-        with open(caminho_destino, "r") as arqui:
-            arquivo = arqui.read()
-    except Exception as error:
-        with open("C:\\telematria_patrimar\\log_error_telemetria_patrimar.txt" , "a") as arqui:
-            arqui.write(f"{data_atual}: {error} \n")
-        sys.exit()
-
-descriptografado = descriptografar(arquivo, 402)
-descriptografado_2 = descriptografado
-while True:
-    try:
-        exec(descriptografado_2)
-    except Exception as error:
-        print(error)
-    sleep(5*60)

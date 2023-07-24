@@ -240,15 +240,4 @@ def verificar_criptografia_ativada():
     # Retorna None se houver algum erro ou se o BitLocker não estiver ativado
     return None
 
-def iniciar():
-    try:
-        principal()
-    except Exception as error:
-        pass
-        print(error)
-
-
-try:
-    iniciar()
-except Exception as error:
-    print(error)
+principal()
