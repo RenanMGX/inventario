@@ -59,6 +59,8 @@ def obter_informacoes_computador():
     modelo_placa_mae = get_motherboard_model()
 
     numero_seria_placa_mae = get_motherboard_serial_number()
+    
+    ip_maquina = pegar_ip()
 
     return {
           "id_dispositivo" : str(id_dispositivo),
@@ -77,7 +79,8 @@ def obter_informacoes_computador():
           "wifi" : str(nome_rede_wifi),
           "data" : str(data_atual),
           "placa_mae" : str(modelo_placa_mae),
-          "placa_mae_serial" : str(numero_seria_placa_mae)
+          "placa_mae_serial" : str(numero_seria_placa_mae),
+          "ip_maquina" : str(ip_maquina)
     }
 
 ######## funçoes para coletar os dados da maquina
@@ -239,5 +242,16 @@ def verificar_criptografia_ativada():
     
     # Retorna None se houver algum erro ou se o BitLocker não estiver ativado
     return None
+
+def pegar_ip():
+    ipconfig = subprocess.check_output("ipconfig" ,text=True,shell=True)
+    ipconfig = ipconfig.split("\n")
+    ip = []
+    for x in ipconfig:
+        if "IPv4" in x:
+            x = x.split(":")
+            ip.append(x[1])
+    return ip
+
 
 principal()
