@@ -19,6 +19,11 @@ import requests
 import win32com.client
 
 def obter_informacoes_computador():
+########################################################################################################################################
+    #versão atual do Script lembrar de atualizar
+    script_ver = 1
+########################################################################################################################################
+
     # # Nome do computador
     nome_computador = socket.gethostname()
 
@@ -80,7 +85,8 @@ def obter_informacoes_computador():
           "data" : str(data_atual),
           "placa_mae" : str(modelo_placa_mae),
           "placa_mae_serial" : str(numero_seria_placa_mae),
-          "ip_maquina" : str(ip_maquina)
+          "ip_maquina" : str(ip_maquina),
+          "versao_script" : str(script_ver)
     }
 
 ######## funçoes para coletar os dados da maquina
@@ -253,5 +259,5 @@ def pegar_ip():
             ip.append(x[1])
     return ip
 
-
+# lembrar de modificar a versão do script toda vez que fizer uma modificação
 principal()
