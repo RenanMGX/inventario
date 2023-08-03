@@ -16,45 +16,11 @@ from time import sleep
 import requests
 import win32com.client
 
-############
-config_padrao_dict = {
+arquivo = {
     "caminho_log_error": r"\\server008\G\ARQ_PATRIMAR\WORK\INVENTARIO\telemetria_patrimar\log_error_telemetria.csv",
     "caminho_online": r"\\server008\G\ARQ_PATRIMAR\WORK\INVENTARIO\telemetria_patrimar\cliente.pickle",
     "caminho_offline": r"C:\Telemetria Patrimar\cliente.pickle"
 }
-
-def verificar_config():
-    try:
-        with open("config.ini","r")as arqui:
-            arquivo_temp = arqui.read().split("\n")
-        arquivo = {}
-        for x in arquivo_temp:
-            y = x.split(";")
-            if len(y) < 2:
-                continue
-            arquivo[y[0]] = y[1]
-        return arquivo
-    except Exception as error:
-        return False
-def config_padrao():
-    try:
-        with open("config.ini","w")as arqui:
-            for x,y in config_padrao_dict.items():
-                arqui.write(f'{x};"{y}"\n')
-        return config_padrao_dict
-    except:
-        sys.exit()
-arquivo = verificar_config()
-if arquivo == False:
-    arquivo = config_padrao() 
-try:
-    arquivo["caminho_log_error"]
-    arquivo["caminho_online"]
-    arquivo["caminho_offline"]
-except:
-    arquivo = config_padrao()
-
-############
 
 usuario = getpass.getuser()
 maquina = socket.gethostname()
@@ -87,14 +53,13 @@ class Telemetria:
     
     def executar(self):
         return self.__codigo
-            
 
 if __name__ == "__main__":
     try:
         caminhos = {"online" : arquivo["caminho_online"].replace('"',""), "offline" : arquivo["caminho_offline"].replace('"',"")}
         iniciar = Telemetria(caminhos)
     except KeyError:
-        arquivo = config_padrao()
+        #arquivo = config_padrao()
         caminhos = {"online" : arquivo["caminho_online"].replace('"',""), "offline" : arquivo["caminho_offline"].replace('"',"")}
         iniciar = Telemetria(caminhos)
     except Exception as error:
@@ -118,4 +83,3 @@ if __name__ == "__main__":
             cont += 1
         sleep(5*60)
     
-
