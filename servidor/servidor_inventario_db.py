@@ -5,13 +5,29 @@
 ##################################################################################
 
 from flask import Flask, request, render_template
-import openpyxl
+import json
 
 
 app = Flask(__name__)
 
+def carregar_json():
+    '''
+    é responsavel por carregar um arquivo json contendo um dicionario com dados de login no sap.
+    caso o arquivo não estiver presente durante a execução irá  criar um arquivo default no lugar.
+    '''
+    jason_default = {"endereco" : r"C:\Users\InnerRep.PATRIMAR\OneDrive - PATRIMAR ENGENHARIA S A\inventario_DP\inventario.db"}
+    while True:
+        try:
+            with open("serv_inventario.json", "r")as arqui:
+                return json.load(arqui)
+        except Exception as error:
+            print(error)
+            with open("serv_inventario.json", "w")as arqui:
+                json.dump(jason_default, arqui)
 
-planilha = r"C:\Users\InnerRep.PATRIMAR\OneDrive - PATRIMAR ENGENHARIA S A\inventario_DP\inventario.db"
+json_config = carregar_json()
+
+planilha = json_config["endereco"]
 
 ################    funções
 def adicionar_dados_excel(planilha, dados):

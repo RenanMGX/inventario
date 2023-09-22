@@ -15,12 +15,14 @@ import subprocess
 from time import sleep
 import requests
 import win32com.client
+import json
 
 arquivo = {
     "caminho_log_error": r"\\server008\G\ARQ_PATRIMAR\WORK\INVENTARIO\telemetria_patrimar\log_error_telemetria.csv",
     "caminho_online": r"\\server008\G\ARQ_PATRIMAR\WORK\INVENTARIO\telemetria_patrimar\cliente.pickle",
     "caminho_offline": r"C:\Telemetria Patrimar\cliente.pickle"
 }
+
 
 usuario = getpass.getuser()
 maquina = socket.gethostname()
@@ -56,11 +58,11 @@ class Telemetria:
 
 if __name__ == "__main__":
     try:
-        caminhos = {"online" : arquivo["caminho_online"].replace('"',""), "offline" : arquivo["caminho_offline"].replace('"',"")}
+        caminhos = {"online" : arquivo["caminho_online"], "offline" : arquivo["caminho_offline"]}
         iniciar = Telemetria(caminhos)
     except KeyError:
         #arquivo = config_padrao()
-        caminhos = {"online" : arquivo["caminho_online"].replace('"',""), "offline" : arquivo["caminho_offline"].replace('"',"")}
+        caminhos = {"online" : arquivo["caminho_online"], "offline" : arquivo["caminho_offline"]}
         iniciar = Telemetria(caminhos)
     except Exception as error:
         print(error)

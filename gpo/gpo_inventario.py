@@ -9,6 +9,7 @@ import datetime
 import psutil
 import getpass
 import socket
+import json
 ###########
 
 class InventarioGPO:
@@ -29,4 +30,4 @@ if __name__ == "__main__":
         exec(programa.decoder())
     except Exception as error:
         print(error)
-        pass
+        input()
