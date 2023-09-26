@@ -28,6 +28,6 @@ if __name__ == "__main__":
     try:
         programa = InventarioGPO("code.pickle")
         exec(programa.decoder())
+        sys.exit()
     except Exception as error:
         print(error)
-        input()

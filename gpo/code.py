@@ -38,8 +38,10 @@ arquivo = carregar_json()
 
 
 def verificar_execucao_processo(nome_processo="telemetria_patrimar.exe"):
-    for processo in psutil.process_iter(['name']):
+    for processo in psutil.process_iter(attrs=['pid', 'name']):
         if processo.info['name'] == nome_processo:
+            pid = processo.info['pid']
+            psutil.Process(pid).terminate()
             return True
     return False
 
@@ -86,12 +88,13 @@ def iniciar():
         print(atalho.Targetpath)
         subprocess.Popen(atalho.Targetpath, shell=True)
         print("executou")
-        sys.exit()
         
 
 
 if __name__ == "__main__":
     try:
+        for x in range(3):
+            verificar_execucao_processo()
         iniciar()
     except Exception as error:
         print(error)
